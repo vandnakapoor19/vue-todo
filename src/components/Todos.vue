@@ -4,21 +4,23 @@
              <TodoItem v-bind:todo="todo" v-on:del-todo="$emit('del-todo',todo.id)"/>
         </div>
         <div class="extra-container">
-            <div><label for=""><input type="checkbox" :checked="!anyRemaining" @change="checkAllTodos">check All</label></div>
-            <div>Item Left {{remaining}}</div>
+            <TodoCheckAll :anyRemaining='anyRemaining'></TodoCheckAll>
+            <TodoItemRemaining :remaining="remaining"></TodoItemRemaining>
         </div>
         <div class="extra-container">
             <button :class="{active:filter=='all'}" @click="filter='all'">All</button>
             <button :class="{active:filter=='active'}" @click="filter='active'">Active</button>
             <button :class="{active:filter=='completed'}" @click="filter='completed'">Completed</button>
         </div>
-        <div> 
-            <button v-if="showCompletedButton" @click="clearCompleted">Clear Completed</button> </div>
+        
+    
     </div>
 </template>
 
 <script>
     import  TodoItem from "./TodoItem";
+    import TodoItemRemaining from './TodoItemRemaining';
+    import TodoCheckAll from './TodoCheckAll';
     export default {
         name: "Todos",
         data(){
@@ -27,7 +29,9 @@
             }
         },
         components: {
-            TodoItem
+            TodoItem,
+            TodoItemRemaining,
+            TodoCheckAll
         },
         props:  ["todos"],
         computed:{
@@ -49,18 +53,8 @@
                   return this.todos.filter(todo=> todo.completed)
                 }
                 return this.todos; 
-            },
-            showCompletedButton(){
-               return this.todos.filter(todo=> todo.completed).length>1
             }
-        },
-        methods:{
-            checkAllTodos(){
-                this.todos.forEach(todo=> todo.completed=event.target.checked)
-            },
-            clearCompleted(){
-                this.todos = this.todos.filter(todo=>!todo.completed);
-            }
+           
         }
     }
 </script>
