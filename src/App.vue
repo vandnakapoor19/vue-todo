@@ -38,6 +38,9 @@ export default {
     checkAllTodos(){
         this.todos.forEach(todo=> todo.completed=event.target.checked)
       },
+      fiterChanged(){
+        console.log('test1111');
+      },
     addTodo(newTodo){
       const {title,completed} = newTodo;
       axios.post('https://jsonplaceholder.typicode.com/todos',

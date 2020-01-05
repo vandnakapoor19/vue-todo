@@ -8,9 +8,8 @@
             <TodoItemRemaining :remaining="remaining"></TodoItemRemaining>
         </div>
         <div class="extra-container">
-            <button :class="{active:filter=='all'}" @click="filter='all'">All</button>
-            <button :class="{active:filter=='active'}" @click="filter='active'">Active</button>
-            <button :class="{active:filter=='completed'}" @click="filter='completed'">Completed</button>
+            <TodoFilter></TodoFilter>
+          
         </div>
         
     
@@ -18,49 +17,55 @@
 </template>
 
 <script>
+    import { eventBus } from '../main';
     import  TodoItem from "./TodoItem";
     import TodoItemRemaining from './TodoItemRemaining';
     import TodoCheckAll from './TodoCheckAll';
+    import TodoFilter from './TodoFiltered';
+    
     export default {
         name: "Todos",
-        data(){
-            return{
-               filter:'all' 
-            }
-        },
         components: {
             TodoItem,
             TodoItemRemaining,
-            TodoCheckAll
+            TodoCheckAll,
+            TodoFilter
+        },
+            data(){
+            return{
+                filter:'all' 
+            }
         },
         props:  ["todos"],
-        computed:{
+        created(){
+            eventBus.$on('filterChanged',(filter)=>this.filter=filter)
+        },
+        computed:{  
             remaining(){
                return this.todos.filter(todo=>!todo.completed).length;
             },
             anyRemaining(){
                 return this.remaining!=0;
             },
-            // eslint-disable-next-line vue/return-in-computed-property
             todosFilter(){
-                if(this.filter=='all'){
-                   return this.todos; 
-                }
-                  else if(this.filter=='active'){
-                    return this.todos.filter(todo=>!todo.completed)
-                }
-                else if(this.filter=='completed'){
-                  return this.todos.filter(todo=> todo.completed)
-                }
+            console.log('test');
+            if(this.filter=='all'){
                 return this.todos; 
             }
-           
+              else if(this.filter=='active'){
+                return this.todos.filter(todo=>!todo.completed)
+            }
+            else if(this.filter=='completed'){
+              return this.todos.filter(todo=> todo.completed)
+            }
+            return this.todos; 
+        }
         }
     }
 </script>
 
 
-<style lang="stylus" scoped>
+<style lang="stylus">
     .extra-container{
         display : flex;
     }
