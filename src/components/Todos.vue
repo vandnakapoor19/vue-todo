@@ -39,32 +39,32 @@
         },
         props:  ["todos"],
         created(){
-            eventBus.$on('filterChanged',(filter)=>this.filter=filter)     
+            eventBus.$on('filterChanged',(filter)=>this.$store.state.filter=filter)     
         },
          beforeDestroy(){
-            eventBus.$off('filterChanged',(filter)=>this.filter=filter) 
+            eventBus.$off('filterChanged',(filter)=>this.$store.state.filter=filter) 
             },
         computed:{  
             remaining(){
-               return this.todos.filter(todo=>!todo.completed).length;
+               return this.$store.state.todos.filter(todo=>!todo.completed).length;
             },
             anyRemaining(){
                 return this.remaining!=0;
             },
             showCompletedButton(){
-                    return this.todos.filter(todo=> todo.completed).length>1
+                    return this.$store.state.todos.filter(todo=> todo.completed).length>1
                 },
             todosFilter(){
-                if(this.filter=='all'){
-                    return this.todos; 
+                if(this.$store.state.filter=='all'){
+                    return this.$store.state.todos; 
                 }
-                else if(this.filter=='active'){
-                    return this.todos.filter(todo=>!todo.completed)
+                else if(this.$store.state.filter=='active'){
+                    return this.$store.state.todos.filter(todo=>!todo.completed)
                 }
-                else if(this.filter=='completed'){
-                return this.todos.filter(todo=> todo.completed)
+                else if(this.$store.state.filter=='completed'){
+                return this.$store.state.todos.filter(todo=> todo.completed)
                 }
-                return this.todos; 
+                return this.$store.state.todos; 
             }
         }
     }

@@ -6,7 +6,6 @@
       
     </div>
 </template>
-
 <script>
 import Header from './components/layout/Header';
 import Todos from './components/Todos';
@@ -28,10 +27,10 @@ export default {
   },
   methods:{
     delTodo(id){
-      this.todos = this.todos.filter(todo=>todo.id!=id)
+      this.$store.state.todos = this.$store.state.todos.filter(todo=>todo.id!=id)
     },
     checkAllTodos(){
-        this.todos.forEach(todo=> todo.completed=event.target.checked)
+        this.$store.state.todos.forEach(todo=> todo.completed=event.target.checked)
       },
       fiterChanged(){
         console.log('test1111');
@@ -43,18 +42,16 @@ export default {
         title, 
         completed
       })
-      .then(res => this.todos = [...this.todos,res.data])
+      .then(res => this.$store.state.todos = [...this.$store.state.todos,res.data])
       .catch(err =>console.log(err));
     },
     clearCompleted(){
-      this.todos = this.todos.filter(todo=>!todo.completed);
+      this.$store.state.todos = this.$store.state.todos.filter(todo=>!todo.completed);
     }
   },
   created(){
         axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
-        .then(res => this.todos=res.data).catch(err => { console.log(err) });
-
-        
+        .then(res => this.$store.state.todos=res.data).catch(err => { console.log(err) }); 
         eventBus.$on('checkAllTodos',(checked)=>this.checkAllTodos(checked));
         eventBus.$on('clearCompletedTodo',()=> this.clearCompleted());
     },
