@@ -48,7 +48,6 @@
                 return this.remaining!=0;
             },
             todosFilter(){
-            console.log('test');
             if(this.filter=='all'){
                 return this.todos; 
             }
