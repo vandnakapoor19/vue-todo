@@ -3,7 +3,7 @@
       <Header />
       <AddTodo v-on:add-todo="addTodo"/>
       <Todos v-bind:todos ="todos" v-on:del-todo="delTodo"/>
-      <div> <button v-if="showCompletedButton" @click="clearCompleted">Clear Completed</button> </div>
+      
     </div>
 </template>
 
@@ -26,11 +26,6 @@ export default {
      todos :  []
    } 
   },
-   computed:{
-      showCompletedButton(){
-            return this.todos.filter(todo=> todo.completed).length>1
-        }
-     },
   methods:{
     delTodo(id){
       this.todos = this.todos.filter(todo=>todo.id!=id)
@@ -58,7 +53,14 @@ export default {
   created(){
         axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
         .then(res => this.todos=res.data).catch(err => { console.log(err) });
-         eventBus.$on('checkAllTodos',(checked)=>this.checkAllTodos(checked));
+
+        
+        eventBus.$on('checkAllTodos',(checked)=>this.checkAllTodos(checked));
+        eventBus.$on('clearCompletedTodo',()=> this.clearCompleted());
+    },
+    beforeDestroy(){
+      eventBus.$off('checkAllTodos',(checked)=>this.checkAllTodos(checked));
+        eventBus.$off('clearCompletedTodo',()=> this.clearCompleted());
     }
 }
 </script>

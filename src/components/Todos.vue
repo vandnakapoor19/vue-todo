@@ -8,10 +8,9 @@
             <TodoItemRemaining :remaining="remaining"></TodoItemRemaining>
         </div>
         <div class="extra-container">
-            <TodoFilter></TodoFilter>
-          
+            <TodoFilter></TodoFilter>  
         </div>
-        
+        <div> <TodoClearCompleted :showCompletedButton="showCompletedButton"></TodoClearCompleted></div>
     
     </div>
 </template>
@@ -22,6 +21,7 @@
     import TodoItemRemaining from './TodoItemRemaining';
     import TodoCheckAll from './TodoCheckAll';
     import TodoFilter from './TodoFiltered';
+    import TodoClearCompleted from './TodoClearCompleted';
     
     export default {
         name: "Todos",
@@ -29,7 +29,8 @@
             TodoItem,
             TodoItemRemaining,
             TodoCheckAll,
-            TodoFilter
+            TodoFilter,
+            TodoClearCompleted
         },
             data(){
             return{
@@ -38,8 +39,11 @@
         },
         props:  ["todos"],
         created(){
-            eventBus.$on('filterChanged',(filter)=>this.filter=filter)
+            eventBus.$on('filterChanged',(filter)=>this.filter=filter)     
         },
+         beforeDestroy(){
+            eventBus.$off('filterChanged',(filter)=>this.filter=filter) 
+            },
         computed:{  
             remaining(){
                return this.todos.filter(todo=>!todo.completed).length;
@@ -47,18 +51,21 @@
             anyRemaining(){
                 return this.remaining!=0;
             },
+            showCompletedButton(){
+                    return this.todos.filter(todo=> todo.completed).length>1
+                },
             todosFilter(){
-            if(this.filter=='all'){
+                if(this.filter=='all'){
+                    return this.todos; 
+                }
+                else if(this.filter=='active'){
+                    return this.todos.filter(todo=>!todo.completed)
+                }
+                else if(this.filter=='completed'){
+                return this.todos.filter(todo=> todo.completed)
+                }
                 return this.todos; 
             }
-              else if(this.filter=='active'){
-                return this.todos.filter(todo=>!todo.completed)
-            }
-            else if(this.filter=='completed'){
-              return this.todos.filter(todo=> todo.completed)
-            }
-            return this.todos; 
-        }
         }
     }
 </script>
