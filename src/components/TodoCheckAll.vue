@@ -5,19 +5,17 @@
 </template>
 
 <script>
-import { eventBus } from '../main'
 export default {
     name:'todo-checkAll',
-    props:{
-        anyRemaining:{
-            type:Boolean,
-            required:true
-        }
-    },
     methods:{
        allChecked(){
-           eventBus.$emit('checkAllTodos',this.anyRemaining)
+           this.$store.commit('checkAll',event.target.checked);
        } 
+    },
+    computed:{
+        anyRemaining(){
+             return this.$store.getters.anyRemaining;
+        }
     }
 }
 </script>

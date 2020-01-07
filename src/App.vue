@@ -2,7 +2,7 @@
   <div id="app">
       <Header />
       <AddTodo v-on:add-todo="addTodo"/>
-      <Todos v-bind:todos ="todos" v-on:del-todo="delTodo"/>
+      <Todos v-bind:todos ="todos"/>
       
     </div>
 </template>
@@ -11,7 +11,6 @@ import Header from './components/layout/Header';
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import axios from 'axios';
-import { eventBus } from './main'
 
 export default {
   name: 'app',
@@ -26,12 +25,6 @@ export default {
    } 
   },
   methods:{
-    delTodo(id){
-      this.$store.state.todos = this.$store.state.todos.filter(todo=>todo.id!=id)
-    },
-    checkAllTodos(){
-        this.$store.state.todos.forEach(todo=> todo.completed=event.target.checked)
-      },
       fiterChanged(){
         console.log('test1111');
       },
@@ -44,20 +37,11 @@ export default {
       })
       .then(res => this.$store.state.todos = [...this.$store.state.todos,res.data])
       .catch(err =>console.log(err));
-    },
-    clearCompleted(){
-      this.$store.state.todos = this.$store.state.todos.filter(todo=>!todo.completed);
     }
   },
   created(){
         axios.get('https://jsonplaceholder.typicode.com/todos?_limit=5')
         .then(res => this.$store.state.todos=res.data).catch(err => { console.log(err) }); 
-        eventBus.$on('checkAllTodos',(checked)=>this.checkAllTodos(checked));
-        eventBus.$on('clearCompletedTodo',()=> this.clearCompleted());
-    },
-    beforeDestroy(){
-      eventBus.$off('checkAllTodos',(checked)=>this.checkAllTodos(checked));
-        eventBus.$off('clearCompletedTodo',()=> this.clearCompleted());
     }
 }
 </script>

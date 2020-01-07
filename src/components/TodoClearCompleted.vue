@@ -3,17 +3,16 @@
 </template>
 
 <script>
-import { eventBus } from '../main'
 export default {
     name:'TodoClearCompleted',
-   props:{
-       showCompletedButton:{
-           type:Boolean
+   computed:{
+       showCompletedButton(){
+           return this.$store.getters.showCompletedButton;
        }
    },
    methods:{
        clearCompleted(){
-           eventBus.$emit('clearCompletedTodo');
+           this.$store.commit('clearCompleted');
        }
    }
 }

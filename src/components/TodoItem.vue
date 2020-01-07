@@ -3,7 +3,7 @@
         <p>
             <input type="checkbox" v-model="todo.completed">
             {{todo.title}}
-            <button @click="$emit('del-todo',todo.id)" class="del">X</button>
+            <button @click="removeTodo(todo.id)" class="del">X</button>
             </p>
     </div>
 </template>
@@ -12,6 +12,11 @@
 export default {
     name:"TodoItem",
     props: ["todo"],
+    methods:{
+        removeTodo(id){
+            this.$store.commit('delTodo',id)
+        }
+    }
     
 }
 </script>

@@ -7,10 +7,9 @@
 <script>
 export default {
     name:'ItemRemaining',
-    props:{
-        remaining:{
-            type:Number,
-            required:true
+    computed:{
+        remaining(){
+            return this.$store.getters.remaining;
         }
     }
 }

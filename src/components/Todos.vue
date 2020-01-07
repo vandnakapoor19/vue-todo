@@ -1,22 +1,21 @@
 <template>
     <div>
         <div v-for="(todo) in todosFilter" :key="todo.id">
-             <TodoItem v-bind:todo="todo" v-on:del-todo="$emit('del-todo',todo.id)"/>
+             <TodoItem v-bind:todo="todo" />
         </div>
         <div class="extra-container">
-            <TodoCheckAll :anyRemaining='anyRemaining'></TodoCheckAll>
-            <TodoItemRemaining :remaining="remaining"></TodoItemRemaining>
+            <TodoCheckAll></TodoCheckAll>
+            <TodoItemRemaining></TodoItemRemaining>
         </div>
         <div class="extra-container">
             <TodoFilter></TodoFilter>  
         </div>
-        <div> <TodoClearCompleted :showCompletedButton="showCompletedButton"></TodoClearCompleted></div>
+        <div> <TodoClearCompleted></TodoClearCompleted></div>
     
     </div>
 </template>
 
 <script>
-    import { eventBus } from '../main';
     import  TodoItem from "./TodoItem";
     import TodoItemRemaining from './TodoItemRemaining';
     import TodoCheckAll from './TodoCheckAll';
@@ -38,33 +37,18 @@
             }
         },
         props:  ["todos"],
-        created(){
-            eventBus.$on('filterChanged',(filter)=>this.$store.state.filter=filter)     
-        },
-         beforeDestroy(){
-            eventBus.$off('filterChanged',(filter)=>this.$store.state.filter=filter) 
-            },
         computed:{  
             remaining(){
-               return this.$store.state.todos.filter(todo=>!todo.completed).length;
+               return this.$store.getters.remaining;
             },
             anyRemaining(){
-                return this.remaining!=0;
+                return this.$store.getters.anyRemaining;
             },
             showCompletedButton(){
-                    return this.$store.state.todos.filter(todo=> todo.completed).length>1
+                   return this.$store.getters.showCompletedButton;
                 },
             todosFilter(){
-                if(this.$store.state.filter=='all'){
-                    return this.$store.state.todos; 
-                }
-                else if(this.$store.state.filter=='active'){
-                    return this.$store.state.todos.filter(todo=>!todo.completed)
-                }
-                else if(this.$store.state.filter=='completed'){
-                return this.$store.state.todos.filter(todo=> todo.completed)
-                }
-                return this.$store.state.todos; 
+               return this.$store.getters.todosFilter;
             }
         }
     }
