@@ -14,7 +14,7 @@ export default {
     props: ["todo"],
     methods:{
         removeTodo(id){
-            this.$store.commit('delTodo',id)
+            this.$store.dispatch('delTodo',id)
         }
     }
     

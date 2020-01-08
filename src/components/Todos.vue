@@ -38,15 +38,10 @@
         },
         props:  ["todos"],
         computed:{  
-            remaining(){
-               return this.$store.getters.remaining;
-            },
+          
             anyRemaining(){
                 return this.$store.getters.anyRemaining;
             },
-            showCompletedButton(){
-                   return this.$store.getters.showCompletedButton;
-                },
             todosFilter(){
                return this.$store.getters.todosFilter;
             }

@@ -44,5 +44,32 @@ export const store = new Vuex.Store({
         delTodo(state, id){
             state.todos = state.todos.filter(todo=>todo.id!=id)
         }
+    },
+    actions:{
+        // Mutation and actions are same. One main difference is:  we use actions for asynchronus code like for ajax call
+        clearCompleted(context){
+            setTimeout(()=>{
+             context.commit('clearCompleted');   
+            },1000)
+            
+        },
+        changeFilter(context,filter){
+            setTimeout(()=>{
+               context.commit('changeFilter',filter); 
+            },1000)
+            
+        },
+        checkAll(context,check){
+            setTimeout(()=>{
+                context.commit('checkAll',check);
+            },1000)
+            
+        },
+        delTodo(context, id){
+            setTimeout(()=>{
+                context.commit('delTodo',id);
+            },1000)
+            
+        }
     }
 });
